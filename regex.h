@@ -3,12 +3,16 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef struct regex_char {
+typedef struct regex_char_range{
 	uint64_t a;
 	uint64_t b;
+	uint8_t size;
+} regex_char_range_t;
+
+typedef struct regex_char {
+	regex_char_range_t rcr;
 	bool question;
 	bool starred;
-	uint8_t size;
 } regex_char_t;
 
 void regex_print_char(const regex_char_t *rc);

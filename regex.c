@@ -3,12 +3,12 @@
 
 void regex_print_char(const regex_char_t *rc) {
 	for (int c = 0; c < 64; c++) {
-		if (rc->a & ((uint64_t)1 << (uint8_t)c)) {
+		if (rc->rcr.a & ((uint64_t)1 << (uint8_t)c)) {
 			printf("%c, ", (char)c);
 		}
 	}
 	for (int c = 0; c < 64; c++) {
-		if (rc->b & ((uint64_t)1 << (uint8_t)c)) {
+		if (rc->rcr.b & ((uint64_t)1 << (uint8_t)c)) {
 			printf("%c, ", (char)(c + 64));
 		}
 	}
@@ -18,15 +18,15 @@ void regex_print_char(const regex_char_t *rc) {
 	} else if (rc->starred) {
 		printf("0 or more\n");
 	}
-	printf("size: %d\n", rc->size);
+	printf("size: %d\n", rc->rcr.size);
 }
 
 void regex_add_char(regex_char_t *out_rc, char to_add) {
 	if (to_add > 64)
-		out_rc->b |= (uint64_t)1 << (uint64_t)(to_add - 64);
+		out_rc->rcr.b |= (uint64_t)1 << (uint64_t)(to_add - 64);
 	else
-		out_rc->a = (uint64_t)1 << (uint64_t)to_add;
-	out_rc->size++;
+		out_rc->rcr.a = (uint64_t)1 << (uint64_t)to_add;
+	out_rc->rcr.size++;
 }
 
 int regex_get_next_char_offset(const char *str, regex_char_t *out_rc) {
@@ -34,9 +34,9 @@ int regex_get_next_char_offset(const char *str, regex_char_t *out_rc) {
 	char c = str[0];
 	out_rc->question = false;
 	out_rc->starred = false;
-	out_rc->a = 0;
-	out_rc->b = 0;
-	out_rc->size = 0;
+	out_rc->rcr.a = 0;
+	out_rc->rcr.b = 0;
+	out_rc->rcr.size = 0;
 	// check if backslash
 	if (c == '\\') {
 		c = str[1];
